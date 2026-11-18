@@ -1,0 +1,23 @@
+# ===== 通用 =====
+.DS_Store
+Thumbs.db
+*.log
+
+# ===== IDE =====
+.idea/
+*.iml
+.vscode/
+!.vscode/extensions.json
+
+# ===== 后端（Maven） =====
+backend/target/
+# H2 数据库文件（本地开发数据，不提交）
+backend/data/
+
+# ===== 本地工具（免安装版 Redis 等，不提交） =====
+.tools/
+
+# ===== 前端（Node / Vite） =====
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local

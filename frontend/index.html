@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- public 目录下的文件原样复制到网站根路径，/favicon.svg 对应 frontend/public/favicon.svg -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>博客后台管理</title>
+  </head>
+  <body>
+    <!--
+      单页应用（SPA）只有这一个 HTML 页面。
+      React 会把整个应用渲染进下面这个 div（见 src/main.jsx 的 createRoot），
+      之后切换 "页面" 其实是 React Router 在替换这个 div 里的组件，浏览器并不会重新加载 HTML。
+    -->
+    <div id="root"></div>
+    <!-- Vite 以 ES Module 方式加载入口文件，开发时按需编译，所以启动很快 -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

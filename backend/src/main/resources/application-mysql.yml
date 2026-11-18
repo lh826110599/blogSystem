@@ -1,0 +1,24 @@
+# =====================================================================
+# mysql 环境（默认启用）：连接本地 MySQL 8 的 blogsystem 库。
+#
+# 首次使用：
+#   1. 在 MySQL 里执行一次 backend/sql/blog_v1.sql（建表 + 初始数据）
+#   2. 账号密码不是 root/root 时，用环境变量 MYSQL_USERNAME / MYSQL_PASSWORD 覆盖，不要把真实密码写进这个文件
+# =====================================================================
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # URL 参数含义：
+    #   characterEncoding=utf8          → 客户端按 UTF-8 收发数据，中文不乱码（驱动会自动使用 utf8mb4）
+    #   serverTimezone=Asia/Shanghai    → 和数据库时区一致，否则 LocalDateTime 可能差 8 小时
+    #   useSSL=false                    → 本地开发不走 SSL
+    #   allowPublicKeyRetrieval=true    → MySQL 8 默认的 caching_sha2_password 认证方式在不走 SSL 时需要它
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:blogsystem}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:root}
+
+  # MySQL 的表结构由手动执行的 blog_v1.sql 创建，启动时不自动执行任何脚本
+  sql:
+    init:
+      mode: never

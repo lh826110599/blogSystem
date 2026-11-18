@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  文章 Mapper 的自定义 SQL。
+  namespace 必须等于接口全限定名，<select> 的 id 必须等于接口方法名，MyBatis 靠这两点把接口和 SQL 绑定起来。
+
+  这里的 SQL 同时兼容 MySQL 和 H2（MySQL 模式），切换 profile 不用改。
+-->
+<mapper namespace="com.blog.mapper.ArticleMapper">
+
+    <!--
+      <sql> 定义可复用的 SQL 片段，用 <include refid="..."/> 引用。
+      列表和详情查询的列、联表部分相同，抽出来避免写两遍。
+
+      两点注意：
+      1. 手写 SQL 不会自动加逻辑删除条件（MyBatis-Plus 只对 BaseMapper 自带方法和 Wrapper 生效），
+         所以要自己写 a.deleted = 0
+      2. user 在 H2 里是关键字，表名加反引号，MySQL 和 H2 都能识别
+    -->
+    <sql id="ArticleVoColumns">
+        a.id,
+        a.title,
+        a.summary,
+        a.cover,
+        a.category_id,
+        c.name     AS category_name,
+        a.author_id,
+        u.nickname AS author_name,
+        a.status,
+        a.is_top,
+        a.view_count,
+        a.like_count,
+        a.collect_count,
+        a.comment_count,
+        a.create_time,
+        a.update_time
+    </sql>
+
+    <sql id="ArticleVoJoins">
+        FROM article a
+        LEFT JOIN category c ON a.category_id = c.id
+        LEFT JOIN `user` u ON a.author_id = u.id
+    </sql>
+
+    <!--
+      分页列表。
+      resultType：每一行结果映射成 ArticleVO，列名下划线自动转驼峰（category_name → categoryName）。
+      <where>：内部有条件时自动加 WHERE，并去掉多余的开头 AND。
+      <if test>：条件成立才拼接这段 SQL，实现 "传了才过滤"。
+      #{} 是预编译占位符（变成 ?），能防 SQL 注入；不要用 ${} 拼接用户输入。
+    -->
+    <select id="selectArticlePage" resultType="com.blog.entity.vo.ArticleVO">
+        SELECT
+        <include refid="ArticleVoColumns"/>
+        <include refid="ArticleVoJoins"/>
+        <where>
+            a.deleted = 0
+            <if test="query.keyword != null and query.keyword != ''">
+                AND a.title LIKE CONCAT('%', #{query.keyword}, '%')
+            </if>
+            <if test="query.categoryId != null">
+                AND a.category_id = #{query.categoryId}
+            </if>
+            <if test="query.status != null">
+                AND a.status = #{query.status}
+            </if>
+        </where>
+        <!-- 置顶的排最前，其余按发布时间倒序；最后按 id 倒序保证同一时间的文章顺序稳定 -->
+        ORDER BY a.is_top DESC, a.create_time DESC, a.id DESC
+    </select>
+
+    <!-- 文章详情：在列表字段的基础上多查一个 content -->
+    <select id="selectArticleDetail" resultType="com.blog.entity.vo.ArticleVO">
+        SELECT
+        <include refid="ArticleVoColumns"/>,
+        a.content
+        <include refid="ArticleVoJoins"/>
+        WHERE a.id = #{id}
+          AND a.deleted = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,38 @@
+/* 后台布局样式（CSS Modules，说明见 pages/Login/index.module.css） */
+
+.layout {
+  min-height: 100vh;
+}
+
+.logo {
+  height: 64px;
+  line-height: 64px;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px 0 16px;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+}
+
+.user {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.content {
+  margin: 24px;
+  padding: 24px;
+  /* 内容少时也撑开，避免白色区域只有一小块 */
+  min-height: 280px;
+}

@@ -1,0 +1,23 @@
+/*
+ * CSS Modules：文件名以 .module.css 结尾，Vite 会把类名编译成唯一的名字（如 _container_x7k2a），
+ * 只对 import 了它的组件生效，不会和其他页面的同名类冲突。
+ * 用法：import styles from './index.module.css'  →  className={styles.container}
+ */
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e6f4ff 0%, #f0f5ff 100%);
+}
+
+.card {
+  width: 380px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 32px !important;
+}

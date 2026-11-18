@@ -1,0 +1,11 @@
+/* 全局样式：只放真正全局的东西，组件自己的样式写在组件旁边的 *.module.css 里 */
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: #f5f5f5;
+}

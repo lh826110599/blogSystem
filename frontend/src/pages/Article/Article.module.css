@@ -1,0 +1,24 @@
+/* 文章列表页、编辑页共用的样式（CSS Modules，说明见 pages/Login/index.module.css） */
+
+/* 列表页顶部：左边筛选表单，右边 "发布文章" 按钮 */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.select {
+  width: 150px !important;
+}
+
+/* 编辑页表单限制最大宽度，宽屏上输入框不会拉得太长 */
+.editForm {
+  max-width: 900px;
+}
+
+/* 正文输入框用等宽字体，写 Markdown 时缩进、代码块更容易对齐 */
+.content {
+  font-family: Consolas, 'Courier New', monospace;
+}

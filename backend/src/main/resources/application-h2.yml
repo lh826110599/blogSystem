@@ -1,0 +1,37 @@
+# =====================================================================
+# h2 环境（备用，默认是 mysql）：嵌入式数据库，跟着后端进程一起启动，不用单独安装 MySQL。
+# 启用方式：设置环境变量 SPRING_PROFILES_ACTIVE=h2 再启动后端。
+#
+# 数据存在本地文件 backend/data/blog.mv.db 里，重启后端数据不丢。
+# 想清空重来：停掉后端 → 删除 backend/data 目录 → 再启动（会重新建表、插入初始数据）。
+# =====================================================================
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    # URL 各部分含义：
+    #   jdbc:h2:file:./data/blog → 文件模式，路径相对于启动目录（在 IDEA 里运行时一般就是 backend/）
+    #   MODE=MySQL               → 兼容 MySQL 语法：AUTO_INCREMENT、LIMIT、INSERT IGNORE、反引号等
+    #   DATABASE_TO_LOWER=TRUE   → 表名、列名按小写处理，和 MySQL 行为一致
+    #   NON_KEYWORDS=USER        → USER 在 H2 里是关键字，加上后 MyBatis-Plus 生成的 FROM user 才不会报语法错误
+    url: jdbc:h2:file:./data/blog;MODE=MySQL;DATABASE_TO_LOWER=TRUE;NON_KEYWORDS=USER
+    username: sa
+    password: ""
+
+  # 启动时自动执行建表脚本和初始数据脚本
+  sql:
+    init:
+      # always：每次启动都执行。脚本本身是幂等的（CREATE TABLE IF NOT EXISTS / INSERT IGNORE），重复执行不会出错也不会重复插入
+      mode: always
+      schema-locations: classpath:db/schema-h2.sql
+      data-locations: classpath:db/data-h2.sql
+      encoding: UTF-8
+
+  # H2 自带的网页版数据库管理界面，可以在浏览器里看表、执行 SQL
+  # 地址：http://localhost:8080/api/h2-console
+  # 登录时 JDBC URL 填上面 url 的值，用户名 sa，密码留空
+  # 默认只允许本机访问；它能执行任意 SQL，只在开发环境开启
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
